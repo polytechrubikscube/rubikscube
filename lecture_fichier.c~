@@ -1,0 +1,33 @@
+/** 
+ **         ////////    |   /__/__/__/ 
+ **        ///   ///    |  |__|__|__|/  Le Rubik's Cube
+ **       ///   ///     |  |__|__|__|/    Projet d'Algorithmie - INFO 3A
+ **      ////////       |  |__|__|__|/      2015 - 2016
+ **     ///olytech      |                                CONNET Cyprien
+ **    ///   Marseille  |                                GUZZI  Olivier
+ ** ######################################################################
+ **  Nom du fichier       : lecture_fichier.c
+ **  Date de création     : Le 20 Décembre 2015 à 10h00
+ **  Date de modification : Le 24 Décembre 2015 à 13h00
+ **/
+
+#include "rubikscube.h"
+
+t_cube	*ft_read_file(char *path)
+{
+	int fd;
+	ssize_t size;
+	char *buff
+
+	fd = open(path, O_RDONLY);
+	if (fd == -1)
+	{
+		print_f("File Reading Error\n");
+		return (NULL);
+	}
+
+	while ((size = read(fd, buff, BUFF_SIZE) > 0)
+	{
+		
+	}	
+} 
