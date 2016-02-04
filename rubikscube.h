@@ -53,4 +53,9 @@ typedef enum e_couleur {
 	r = 0, g = 1, b = 2, w = 3, o = 4, y = 5 
 }               		t_couleur;
 
+/** t_faces : int, **/
+typedef enum e_faces {
+        f, b, u, d, l, r
+}               		t_faces;
+
 #endif

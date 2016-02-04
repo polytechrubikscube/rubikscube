@@ -13,20 +13,24 @@
 
 #include "rubikscube.h"
 
-void	*ft_error(int e)
+/** void	*ft_error(int e)
 {
 	printf ("Error\t");
 	switch (e)
 	{
 		case 1:
-			printf("File Reading Error")
+			printf("File Reading Error");
 	}
 	return (NULL);
-}
+} **/
 
 t_cube	*ft_read_file(char *path)
 {
 	int fd;
+	int cur_color;
+	int cur_face;
+	int line;
+	int col;
 	int index;
 	ssize_t size;
 	char *buff;

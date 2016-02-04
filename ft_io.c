@@ -53,3 +53,12 @@ char	ft_color_to_char(int c)
 			return (-1);
 	}
 }
+
+void	ft_print_cube(t_cube *cube)
+{
+	int cur_face;
+	int line;
+	int col;
+
+	
+}
