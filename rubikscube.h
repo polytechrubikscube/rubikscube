@@ -101,5 +101,7 @@ void	ft_print_cube(t_cube *cube);
 /** ft_file.c - File IO functions  **/
 t_cube	*ft_read_file(char *path);
 
+/** ft_error.c - Error treatment **/
+void	*ft_error(int e);
 
 #endif

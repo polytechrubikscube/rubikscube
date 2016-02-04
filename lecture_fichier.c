@@ -13,17 +13,6 @@
 
 #include "rubikscube.h"
 
-/** void	*ft_error(int e)
-{
-	printf ("Error\t");
-	switch (e)
-	{
-		case 1:
-			printf("File Reading Error");
-	}
-	return (NULL);
-} **/
-
 t_cube	*ft_read_file(char *path)
 {
 	int fd;
@@ -39,10 +28,7 @@ t_cube	*ft_read_file(char *path)
 	/** Ouverture du fichier et récupération du file descriptor **/
 	fd = open(path, O_RDONLY);
 	if (fd == -1)
-	{
-		print_f("File Reading Error\n");
-		return (NULL);
-	}
+		return (ft_error(1));
 
 	/** Initialisation du buffer **/
 	buff = (char *)malloc(size_t(char) * BUFF_SIZE + 1);
@@ -52,18 +38,9 @@ t_cube	*ft_read_file(char *path)
 	/** Lecture du fichier **/
 	size = read(fd, buff, BUFF_SIZE);
 	if (size <= 0)
-	{
-		printf("File Reading Error. Not found or corrupt.");
-		return (NULL);
-	}
+		return (ft_error(2));
 	if (size != 78)
-	{
-		printf("File Reading Error [2]\n");
-		printf("Please control the format of your file.\n");
-		printf("\'bbb.bbb.bbb.\\n\' for each face without any\nspace");
-		printf(" (78 char, do not miss the last \\n).\n");
-		return (NULL);
-	}
+		return (ft_error(3));
 	
 	/** Traitement du buffer **/
 	cube = ft_new_cube();
@@ -73,10 +50,7 @@ t_cube	*ft_read_file(char *path)
 		if (cur_color >= 0)
 			cube->faces[cur_face][line][col] = cur_color;
 		else
-		{
-			printf("File Reading Error [bad color]");
-			return (NULL);
-		}
+			return (ft_error(4));
 
 		/** On incrémente les indices de face, 
 			colonne et ligne puis on oublie
@@ -86,26 +60,14 @@ t_cube	*ft_read_file(char *path)
 		line = line + col / 3;
 		if (col / 3 && buff[index + 1] == '.')
 			++index;
-		else if (col / 3)
-		{
-			printf("File Reading Error [2]\n");
-			printf("Please control the format of your file.\n");
-			printf("\'bbb.bbb.bbb.\\n\' for each face without any space");
-			printf(" or new line.\n");
-			return (NULL);
-		}
+		else if (col / 3)			
+			return (ft_error(5));
 		col = col % 3;
 		cur_face = cur_face + line / 3;
 		if (line / 3 && buff[index + 1] == '\n')
 			++index;
 		else if (line / 3)
-		{
-			printf("File Reading Error [2]\n");
-			printf("Please control the format of your file.\n");
-			printf("\'bbb.bbb.bbb.\\n\' for each face without any space");
-			printf(" or new line.\n");
-			return (NULL);
-		}
+			return (ft_error(5));
 		line = line % 3;
 	}
 
