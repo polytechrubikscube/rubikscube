@@ -13,6 +13,17 @@
 
 #include "rubikscube.h"
 
+void	*ft_error(int e)
+{
+	printf ("Error\t");
+	switch (e)
+	{
+		case 1:
+			printf("File Reading Error")
+	}
+	return (NULL);
+}
+
 t_cube	*ft_read_file(char *path)
 {
 	int fd;
@@ -36,19 +47,64 @@ t_cube	*ft_read_file(char *path)
 
 	/** Lecture du fichier **/
 	size = read(fd, buff, BUFF_SIZE);
-	if (size <= 0 || size > 79)
+	if (size <= 0)
+	{
+		printf("File Reading Error. Not found or corrupt.");
+		return (NULL);
+	}
+	if (size != 78)
 	{
 		printf("File Reading Error [2]\n");
 		printf("Please control the format of your file.\n");
-		printf("\'bbb.bbb.bbb..\' for each face without any space");
-		printf(" or new line.\n");
+		printf("\'bbb.bbb.bbb.\\n\' for each face without any\nspace");
+		printf(" (78 char, do not miss the last \\n).\n");
 		return (NULL);
 	}
 	
 	/** Traitement du buffer **/
 	cube = ft_new_cube();
 	for (index = 0; index <= size; size ++)
-	{}
+	{
+		cur_color = ft_char_to_color(buff[index]);
+		if (cur_color >= 0)
+			cube->faces[cur_face][line][col] = cur_color;
+		else
+		{
+			printf("File Reading Error [bad color]");
+			return (NULL);
+		}
+
+		/** On incrémente les indices de face, 
+			colonne et ligne puis on oublie
+			les caractères de mise en forme.
+		 **/			
+		col++;
+		line = line + col / 3;
+		if (col / 3 && buff[index + 1] == '.')
+			++index;
+		else if (col / 3)
+		{
+			printf("File Reading Error [2]\n");
+			printf("Please control the format of your file.\n");
+			printf("\'bbb.bbb.bbb.\\n\' for each face without any space");
+			printf(" or new line.\n");
+			return (NULL);
+		}
+		col = col % 3;
+		cur_face = cur_face + line / 3;
+		if (line / 3 && buff[index + 1] == '\n')
+			++index;
+		else if (line / 3)
+		{
+			printf("File Reading Error [2]\n");
+			printf("Please control the format of your file.\n");
+			printf("\'bbb.bbb.bbb.\\n\' for each face without any space");
+			printf(" or new line.\n");
+			return (NULL);
+		}
+		line = line % 3;
+	}
 
 	return (cube);	
 } 
+

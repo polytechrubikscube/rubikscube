@@ -27,11 +27,9 @@
 
 typedef struct s_liste
 {
-
 	char data;
 	struct s_liste *next;
-
-}		t_liste;
+}				t_liste;
 
 
 /** t_face: elt[line][column] **/
@@ -45,7 +43,14 @@ typedef struct s_cube
 	t_face faces[6];
 	t_liste *rotations;
 	char profondeur_arbre;
-}		t_cube;
+}				t_cube;
 
+
+/** t_couleur: int, **/
+typedef enum e_couleur {
+        red, green, blue, white, orange, yellow,
+	rouge = 0, vert = 1, bleu = 2, blanc = 3, orange = 4, jaune = 5,
+	r = 0, g = 1, b = 2, w = 3, o = 4, y = 5 
+}               		t_couleur;
 
 #endif
