@@ -27,13 +27,13 @@
 
 /** Les types **/
 
-/** t_liste: elt.data, elt.next **/
+/** t_list: elt.data, elt.next **/
 
 typedef struct s_liste
 {
 	char data;
 	struct s_liste *next;
-}				t_liste;
+}				t_list;
 
 /** t_case: elt.color, elt.id **/
 typedef struct s_case
@@ -51,7 +51,7 @@ typedef t_case t_face[3][3];
 typedef struct s_cube
 {
 	t_face faces[6];
-	t_liste *rotations;
+	t_list *rotations;
 	char profondeur_arbre;
 }				t_cube;
 
@@ -102,6 +102,6 @@ void	ft_print_cube(t_cube *cube);
 t_cube	*ft_read_file(char *path);
 
 /** ft_error.c - Error treatment **/
-void	*ft_error(int e)
+void	*ft_error(int e);
 
 #endif
