@@ -52,7 +52,7 @@ typedef struct s_cube
 {
 	t_face faces[6];
 	t_list *rotations;
-	char profondeur_arbre;
+	int node_level;
 }				t_cube;
 
 /** t_faces: int, **/

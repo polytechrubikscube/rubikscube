@@ -29,7 +29,7 @@ void	*ft_error(int e)
 			printf(" or new line.\n");
 			break ;
 		case 10:
-			printf("Memory Error [Can't add the last element in the list]\n");
+			printf("Memory Error [Can't store the last element in memory]\n");
 			break ;
 		default :
 			printf("Error\n");
