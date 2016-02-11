@@ -54,3 +54,4 @@ t_list_mini_cube	*ft_init_list_mini_cube(int i)
 	}
 	return (list_cube);
 }
+

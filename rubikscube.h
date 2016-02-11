@@ -61,6 +61,11 @@ typedef enum e_faces {
         face_f, face_b, face_u, face_d, face_l, face_r
 }               		t_faces;
 
+/** t_rot: int, (rot + 6) = rot 2, (rot +12) = rotrev **/
+typedef enum e_rot {
+        rot_f, rot_b, rot_u, rot_d, rot_l, rot_r, rot_f2, rot_b2, rot_u2, rot_d2, rot_l2, rot_r2, rot_frev, rot_brev, rot_urev, rot_drev, rot_lrev, rot_rrev
+}               		t_rot;
+
 /** t_couleur: int, **/
 typedef enum e_couleur {
         red, green, blue, white, orange, yellow,
