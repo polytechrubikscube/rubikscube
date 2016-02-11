@@ -14,6 +14,7 @@
 #ifndef RUBIKSCUBE_H
 # define RUBIKSCUBE_H
 # define BUFF_SIZE 100
+# define CFC(face, line, col) cube->faces[face][line][col].color
 
 # include <stdio.h>
 # include <assert.h>
@@ -66,6 +67,23 @@ typedef enum e_couleur {
 	rouge = 0, vert = 1, bleu = 2, blanc = 3, jaune = 5,
 	r = 0, g = 1, b = 2, w = 3, o = 4, y = 5 
 }               		t_couleur;
+
+/** t_list_mini_cube: char data->mini_cube[i], data->previous[5], data->next[5] **/
+typedef struct s_list_mini_cube
+{
+	char		 	*mini_cube;
+	struct s_list_mini_cube 	*previous[6];
+	struct s_list_mini_cube 	*next[6];
+}		t_list_mini_cube;
+
+/** t_cube_lists: t_list_mini_cube *cube.elements[1,2,3], t_list *cube.rotations, int cube.node_level **/
+typedef struct s_cube_lists
+{
+	t_list_mini_cube *elements[4];  /** elements [0] -> NULL / [1] -> 1 color by element  / [2] -> ... / [3] -> .. **/
+	t_list	    *rotations;
+	int	     node_level;
+}		t_cube_lists;
+
 
 /***************************/
 /** Functions prototypes **/

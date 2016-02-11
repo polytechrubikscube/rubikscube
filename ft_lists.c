@@ -131,4 +131,4 @@ t_list	*ft_list_del_end(t_list *list)
 		cur = cur->next
 	free(cur);
 	return (list);
-}s
+}

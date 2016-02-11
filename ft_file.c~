@@ -13,6 +13,17 @@
 
 #include "rubikscube.h"
 
+/** void	*ft_error(int e)
+{
+	printf ("Error\t");
+	switch (e)
+	{
+		case 1:
+			printf("File Reading Error");
+	}
+	return (NULL);
+} **/
+
 t_cube	*ft_read_file(char *path)
 {
 	int fd;
@@ -28,29 +39,48 @@ t_cube	*ft_read_file(char *path)
 	/** Ouverture du fichier et récupération du file descriptor **/
 	fd = open(path, O_RDONLY);
 	if (fd == -1)
-		return (ft_error(1));
+	{
+		printf("File Reading Error\n");
+		return (NULL);
+	}
 
 	/** Initialisation du buffer **/
-	buff = (char *)malloc(size_t(char) * BUFF_SIZE + 1);
+	buff = (char *)malloc(sizeof(char) * BUFF_SIZE + 1);
 	for (index = 0; index <= BUFF_SIZE; index++)
 		buff[index] = '\0';
 
 	/** Lecture du fichier **/
 	size = read(fd, buff, BUFF_SIZE);
 	if (size <= 0)
-		return (ft_error(2));
+	{
+		printf("File Reading Error. Not found or corrupt.");
+		return (NULL);
+	}
 	if (size != 78)
-		return (ft_error(3));
+	{
+		printf("File Reading Error [2]\n");
+		printf("Please control the format of your file.\n");
+		printf("\'bbb.bbb.bbb.\\n\' for each face without any\nspace");
+		printf(" (78 char, do not miss the last \\n).\n");
+		return (NULL);
+	}
 	
 	/** Traitement du buffer **/
 	cube = ft_new_cube();
-	for (index = 0; index <= size; size ++)
+	cur_face = 0;
+	line = 0;
+	col = 0;
+
+	for (index = 0; index <= size && cur_face < 6; index++)
 	{
 		cur_color = ft_char_to_color(buff[index]);
 		if (cur_color >= 0)
-			cube->faces[cur_face][line][col] = cur_color;
+			cube->faces[cur_face][line][col].color = cur_color;
 		else
-			return (ft_error(4));
+		{
+			printf("File Reading Error [bad color]");
+			return (NULL);
+		}
 
 		/** On incrémente les indices de face, 
 			colonne et ligne puis on oublie
@@ -60,14 +90,26 @@ t_cube	*ft_read_file(char *path)
 		line = line + col / 3;
 		if (col / 3 && buff[index + 1] == '.')
 			++index;
-		else if (col / 3)			
-			return (ft_error(5));
+		else if (col / 3)
+		{
+			printf("File Reading Error [3]\n");
+			printf("Please control the format of your file.\n");
+			printf("\'bbb.bbb.bbb.\\n\' for each face without any space");
+			printf(" or new line.\n");
+			return (NULL);
+		}
 		col = col % 3;
 		cur_face = cur_face + line / 3;
 		if (line / 3 && buff[index + 1] == '\n')
 			++index;
 		else if (line / 3)
-			return (ft_error(5));
+		{
+			printf("File Reading Error [4]\n");
+			printf("Please control the format of your file.\n");
+			printf("\'bbb.bbb.bbb.\\n\' for each face without any space");
+			printf(" or new line.\n");
+			return (NULL);
+		}
 		line = line % 3;
 	}
 

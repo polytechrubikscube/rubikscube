@@ -1,28 +1,5 @@
 #include "rubikscube.h"
 
-
-typedef struct s_list_mini_cube
-{
-	char		  color;
-	s_list_mini_cube *previous;
-	s_list_mini_cube *next;
-}		t_list_mini_cube;
-
-typedef struct s_list_cube
-{
-/**	char			type;		// type : 0 -> undef, 1, 2, 3 colors **/
-	t_list_mini_cube 	*mini_cube;
-	struct s_list_cube 	*previous[6];
-	struct s_list_cube 	*next[6];
-}		t_list_cube;
-
-typedef struct s_cube_lists
-{
-	t_list_cube *elements[4];  /** elements [0] -> NULL / [1] -> 1 color by element  / [2] -> ... / [3] -> .. **/
-	t_list	    *rotations;
-	int	     node_level;
-}		t_cube_lists;
-
 t_cube_lists	*ft_init_cube_lists(void)
 {
 	int i;
@@ -35,23 +12,45 @@ t_cube_lists	*ft_init_cube_lists(void)
 	if (!cube)
 		return (ft_error(10));
 
-	cube->elements[0] = (t_list *)NULL;
+	cube->elements[0] = (t_list_mini_cube *)NULL;
 	for (i = 1; i < 4; i++)
-		cube->elements[i] = ft_init_list_cube(i);
+		cube->elements[i] = ft_init_list_mini_cube(i);
 	cube->node_level = 0;
 	cube->rotations = ft_list_create_empty();
 	return (cube);
 }
 
-t_list_cube	*ft_init_list_cube(int i)
+char	*ft_list_mini_cube_create(i)
 {
-	t_list_cube *list_cube;
+	char *mini_cube;
 
-	list_cube = ft_list_cube_empty();
-	while (i)
+	mini_cube = (char *)malloc(sizeof(char) * i);
+	if (!mini_cube)
+		return (ft_error(10));
+	while (i < 0)
+		mini_cube[--i] = '\0';
+	return (mini_cube);
+}
+
+t_list_mini_cube	*ft_init_list_mini_cube(int i)
+{
+	t_list_mini_cube *list_cube;
+	int count;
+
+	if (i == 1)
+		count = 6;
+	else if (i == 2)
+		count = 12;
+	else if (i == 3)
+		count = 8;
+	else
+		return (ft_error(8));
+	list_cube = ft_list_mini_cube_empty();
+	while (count)
 	{
-		list_cube = ft_list_cube_add_head(list_cube, ft_mini_cube_create());
-		i--;
+		list_cube = ft_list_mini_cube_add_head(list_cube, ft_list_mini_cube_create(i));
+		
+		count--;
 	}
 	return (list_cube);
 }

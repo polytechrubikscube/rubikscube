@@ -28,6 +28,9 @@ void	*ft_error(int e)
 			printf("without any space");
 			printf(" or new line.\n");
 			break ;
+		case 8:
+			printf("Error. [mini_cubes can only contain 1, 2 or 3 colors !]\n");
+			break ;
 		case 10:
 			printf("Memory Error [Can't store the last element in memory]\n");
 			break ;
