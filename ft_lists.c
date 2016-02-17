@@ -1,5 +1,5 @@
-/** 
- **         ////////    |   /__/__/__/ 
+/**
+ **         ////////    |   /__/__/__/
  **        ///   ///    |  |__|__|__|/  Le Rubik's Cube
  **       ///   ///     |  |__|__|__|/    Projet d'Algorithmie - INFO 3A
  **      ////////       |  |__|__|__|/      2015 - 2016
@@ -45,7 +45,7 @@ t_list	*ft_list_add_head(t_list *list, char elt)
 t_list	*ft_list_del_head(t_list *list)
 {
 	t_list *to_del;
-	
+
 	if (!list)
 		return (ft_list_create_empty());
 	to_del = list;
