@@ -68,7 +68,7 @@ typedef enum e_rot {
 
 /** t_couleur: int, **/
 typedef enum e_couleur {
-        white, red, green, orange, blue,yellow,
+        white, red, green, orange, blue, yellow,
 	blanc = 0,rouge = 1, vert = 2, bleu = 4, jaune = 5,
 	w = 0, r = 1, g = 2, o = 3, b = 4, y = 5 
 }               		t_couleur;
@@ -77,14 +77,16 @@ typedef enum e_couleur {
 typedef struct s_list_mini_cube
 {
 	char		 	*mini_cube;
-	struct s_list_mini_cube 	*next[25];
+	struct s_list_mini_cube 	*next[6];
+	struct s_list_mini_cube 	*previous[6];
 }		t_list_mini_cube;
 
 /** t_cube_lists: t_list_mini_cube *cube.elements[1,2,3], t_list *cube.rotations, int cube.node_level **/
 typedef struct s_cube_lists
 {
 	t_list_mini_cube *elements[4];  /** elements [0] -> NULL / [1] -> 1 color by element  / [2] -> ... / [3] -> .. **/
-	t_list_mini_cube *starts[4][25];
+	t_list_mini_cube *starts[4][6];
+	t_list_mini_cube *lasts[4][6];
 	t_list	    *rotations;
 	int	     node_level;
 }		t_cube_lists;
