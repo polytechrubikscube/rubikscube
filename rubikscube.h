@@ -36,25 +36,6 @@ typedef struct s_liste
 	struct s_liste *next;
 }				t_list;
 
-/** t_case: elt.color, elt.id **/
-typedef struct s_case
-{
-	char color;
-	char id;
-}			t_case;
-
-/** t_face: elt[line][column] **/
-typedef t_case t_face[3][3];
-
-
-/** t_cube: elt.faces[f][line][column], elt.rotations->data,
-		elt.rotations->next, elt.profondeur_arbre **/
-typedef struct s_cube
-{
-	t_face faces[6];
-	t_list *rotations;
-	int node_level;
-}				t_cube;
 
 /** t_faces: int, **/
 typedef enum e_faces {
@@ -68,9 +49,9 @@ typedef enum e_rot {
 
 /** t_couleur: int, **/
 typedef enum e_couleur {
-        white, red, green, orange, blue, yellow,
-	blanc = 0,rouge = 1, vert = 2, bleu = 4, jaune = 5,
-	w = 0, r = 1, g = 2, o = 3, b = 4, y = 5
+        white, yellow, blue, green, orange, red,
+		blanc = 0, jaune = 1, bleu = 2, vert = 3, rouge = 5,
+	w = 0, y = 1, b = 2, g = 3, o = 4, r = 5
 }               		t_couleur;
 
 /** t_list_mini_cube: char data->mini_cube[i], data->previous[5], data->next[5] **/
@@ -85,7 +66,7 @@ typedef struct 	s_list_mini_cube
 typedef struct s_cube_lists
 {
 	t_list_mini_cube *elements[4];  /** elements [0] -> NULL / [1] -> 1 color by element  / [2] -> ... / [3] -> .. **/
-	t_list_mini_cube **starts[4];
+	t_list_mini_cube *starts[4][6];
 	t_list	  			 *rotations;
 	int	     node_level;
 }		t_cube_lists;
@@ -95,37 +76,51 @@ typedef struct s_cube_lists
 /** Functions prototypes **/
 /***************************/
 
-/** Rotations **/
-void ft_rot_f(t_cube *cube);
-void ft_rot_frev(t_cube *cube);
-void ft_rot_f2(t_cube *cube);
-void ft_rot_b(t_cube *cube);
-void ft_rot_brev(t_cube *cube);
-void ft_rot_b2(t_cube *cube);
-void ft_rot_u(t_cube *cube);
-void ft_rot_urev(t_cube *cube);
-void ft_rot_u2(t_cube *cube);
-void ft_rot_d(t_cube *cube);
-void ft_rot_drev(t_cube *cube);
-void ft_rot_d2(t_cube *cube);
-void ft_rot_l(t_cube *cube);
-void ft_rot_lrev(t_cube *cube);
-void ft_rot_l2(t_cube *cube);
-void ft_rot_r(t_cube *cube);
-void ft_rot_rrev(t_cube *cube);
-void ft_rot_r2(t_cube *cube);
-
 /** cube.c **/
 
-t_cube	*ft_new_cube(void);
-
 /** ft_io.c: I/O functions **/
-void	ft_print_cube(t_cube *cube);
+void	ft_print_cube(t_cube_lists *cube);
 
 /** ft_file.c - File IO functions  **/
-t_cube	*ft_read_file(char *path);
+t_cube_lists	*ft_read_file(char *path);
 
 /** ft_error.c - Error treatment **/
 void	*ft_error(int e);
 
+t_cube_lists	*ft_init_cube_lists(void);
+int 	ft_link_cube_lists(t_cube_lists *cube);
+
+
+/** Add elt at the head of the list **/
+t_list_mini_cube	*ft_list_mini_cube_add_head(t_list_mini_cube *list, char *mini_cube);
+t_list_mini_cube	*ft_init_list_mini_cube(int i);
+/** Return an empty list **/
+t_list	*ft_list_create_empty(void);
+/** Return 1 or 0 if list is empty or not. **/
+int	ft_list_is_empty(t_list *list);
+/** Add elt at the head of the list **/
+t_list	*ft_list_add_head(t_list *list, char elt);
+/** Delete the first element at the head of the list and free memory.
+    Return the next element or the empty list. **/
+t_list	*ft_list_del_head(t_list *list);
+void	ft_list_del_list(t_list *list);
+t_list	*ft_list_del_queue(t_list *list);
+t_list	*ft_list_queue(t_list *list);
+char	ft_list_head(t_list *list);
+t_list	*ft_list_add_end(t_list *list, char elt);
+t_list	*ft_list_del_end(t_list *list);
+int	ft_cube_lists_rot(t_cube_lists *cube, int rot);
+int	ft_is_equal_to_one_of_3(char i, char a, char b, char c);
+
+int	ft_is_equal_to_one_of_6(char i, char a, char b, char c, char d, char e, char f);
+
+t_list	*ft_determine_movs(t_cube_lists *cube);
+
+int	ft_backtrack(t_cube_lists *cube);
+
+int	ft_cube_is_solved(t_cube_lists *cube);
+
+int	ft_forbidden_set(t_cube_lists *cube);
+
+int ft_cube_lists_rot_del_last(t_cube_lists *cube);
 #endif

@@ -85,7 +85,7 @@ t_list	*ft_list_del_queue(t_list *list)
 		return (list);
 	to_del = list->next;
 	list->next = ft_list_create_empty();
-	ft_list_del_list_del(to_del);
+	ft_list_del_list(to_del);
 	return (list);
 }
 
@@ -128,7 +128,7 @@ t_list	*ft_list_del_end(t_list *list)
 		return (list);
 	cur = list;
 	while (cur->next)
-		cur = cur->next
+		cur = cur->next;
 	free(cur);
 	return (list);
 }

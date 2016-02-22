@@ -15,9 +15,239 @@ t_cube_lists	*ft_init_cube_lists(void)
 	cube->elements[0] = (t_list_mini_cube *)NULL;
 	for (i = 1; i < 4; i++)
 		cube->elements[i] = ft_init_list_mini_cube(i);
+	ft_link_cube_lists(cube);
 	cube->node_level = 0;
 	cube->rotations = ft_list_create_empty();
+
 	return (cube);
+}
+
+int 	ft_link_cube_lists(t_cube_lists *cube)
+{
+	int i;
+	t_faces f;
+	int type_cube;
+	t_list_mini_cube *cur, *s;
+	t_list_mini_cube *prev;
+
+	cur = cube->elements[1];
+	/** Link des centres **/
+	for (i = 0; i < 6; ++i)
+	{
+		cube->starts[1][i] = cur;
+		cur = cur->next[6];
+	}
+	/** Link des sommets: init de starts[0-5] et des next[0-5]  et previous[1-5]
+	**/
+	/** les cubes sommets **/
+	/** face_f **/
+	type_cube = 3;
+	f = face_f;
+	s = cube->elements[type_cube];
+	cube->starts[type_cube][f] = s;
+	cur = s;
+	i = 0;
+	while (i < 3)
+	{
+		cur->next[f] = cur->next[6];
+		cur->next[f]->previous[f] = cur;
+		cur = cur->next[f];
+		++i;
+	}
+	cur->next[f] = s;
+	s->previous[f] = cur;
+
+	/** face_b **/
+	f = face_b;
+	s = cur->next[6];
+	cube->starts[type_cube][f] = s;
+	cur = s;
+	i = 0;
+	while (i < 3)
+	{
+		cur->next[f] = cur->next[6];
+		cur->next[f]->previous[f] = cur;
+		cur = cur->next[f];
+		++i;
+	}
+	cur->next[f] = s;
+	s->previous[f] = cur;
+
+	/** Face U **/
+	f = face_u;
+	cube->starts[type_cube][f] = cur;
+	cur->next[f] = cur->previous[face_b];
+	cur->next[f]->previous[f] = cur;
+	cur = cur->next[f];
+	cur->previous[f] = prev;
+	cur->next[f] = cube->starts[type_cube][face_f]->next[face_f];
+	prev = cur;
+	cur = cur->next[f];
+	cur->previous[f] = prev;
+	prev = cur;
+	cur->next[f] = cube->starts[type_cube][face_f];
+	cur = cur->next[f];
+	cur->previous[f] = prev;
+	cur->next[f] = cube->starts[type_cube][f];
+	cur->next[f]->previous[f] = cur;
+
+
+	/** Face D **/
+	f = face_d;
+	cube->starts[type_cube][f] = cube->starts[type_cube][face_f]->previous[face_f];
+	cur->next[f] = cur->previous[face_f];
+	cur->next[f]->previous[f] = cur;
+	cur = cur->next[f];
+	
+	cur->next[f]->previous[f] = cur;
+	cur = cur->next[f];
+	cur->next[f] = cube->starts[type_cube][face_b]->next[face_b];
+	cur->next[f] = cube->starts[type_cube][face_b];
+	cur->next[f]->previous[f] = cur;
+	cur = cur->next[f];
+	cur->next[f] = cube->starts[type_cube][f];
+	cur->next[f]->previous[f] = cur;
+
+	
+	/** Face L **/
+	f = face_l;
+	cur = cube->starts[type_cube][face_u];
+	cube->starts[type_cube][f] = cur;
+	cur->next[f] = cube->starts[type_cube][face_f];
+	cur->next[f]->previous[f] = cur;
+	cur = cur->next[f];
+	cur->next[f] = cube->starts[type_cube][face_d];
+	cur->next[f]->previous[f] = cur;
+	cur = cur->next[f];
+	cur->next[f] = cube->starts[type_cube][face_b];
+	cur->next[f]->previous[f] = cur;
+	cur = cur->next[f];
+	cur->next[f] = cube->starts[type_cube][f];
+	cur->next[f]->previous[f] = cur;
+
+	/** Face R **/
+	f = face_r;
+	cur = cube->starts[type_cube][face_f]->next[face_f];
+	cube->starts[type_cube][f] = cur;
+	cur->next[f] = cube->starts[type_cube][face_u]->next[face_u];
+	cur->next[f]->previous[f] = cur;
+	cur = cur->next[f];
+	cur->next[f] = cube->starts[type_cube][face_b]->next[face_b];
+	cur->next[f]->previous[f] = cur;
+	cur = cur->next[f];
+	cur->next[f] = cube->starts[type_cube][face_d]->next[face_d];
+	cur->next[f]->previous[f] = cur;
+	cur = cur->next[f];
+	cur->next[f] = cube->starts[type_cube][f];
+	cur->next[f]->previous[f] = cur;
+
+	/** Link des arretes **/
+
+		/** face_f **/
+	type_cube = 2;
+	f = face_f;
+	s = cube->elements[type_cube];
+	cube->starts[type_cube][f] = s;
+	cur = s;
+	i = 0;
+	while (i < 3)
+	{
+		cur->next[f] = cur->next[6];
+		cur->next[f]->previous[f] = cur;
+		cur = cur->next[f];
+		++i;
+	}
+	cur->next[f] = s;
+	s->previous[f] = cur;
+
+	/** face_b **/
+	f = face_b;
+	s = cur->next[6];
+	cube->starts[type_cube][f] = s;
+	cur = s;
+	i = 0;
+	while (i < 3)
+	{
+		cur->next[f] = cur->next[6];
+		cur->next[f]->previous[f] = cur;
+		cur = cur->next[f];
+		++i;
+	}
+	cur->next[f] = s;
+	s->previous[f] = cur;
+
+	/** Face U **/
+	f = face_u;
+	cur = cube->starts[type_cube][face_b]->next[face_b]->next[face_b];
+	cube->starts[type_cube][f] = cur;
+	cur->next[f] = cube->starts[type_cube][face_b]->previous[face_b]->next[6];
+	cur->next[f]->previous[f] = cur;
+	cur = cur->next[f];
+	cur->next[f] = cube->starts[type_cube][face_f];
+	cur->next[f]->previous[f] = cur;
+	cur = cur->next[f];
+	cur->next[f] = cube->starts[type_cube][f]->next[f]->next[6];
+	cur->next[f]->previous[f] = cur;
+	cur = cur->next[f];
+	cur->next[f] = cube->starts[type_cube][f];
+	cur->next[f]->previous[f] = cur;
+	cur = cur->next[f];
+
+	/** Face D **/
+	f = face_d;
+	cur = cube->starts[type_cube][face_f]->next[face_f]->next[face_f];
+	cube->starts[type_cube][f] = cur;
+	cur->next[f] = cube->starts[type_cube][face_u]->previous[face_u]->next[6];
+	cur->next[f]->previous[f] = cur;
+	cur = cur->next[f];
+	cur->next[f] = cube->starts[type_cube][face_b];
+	cur->next[f]->previous[f] = cur;
+	cur = cur->next[f];
+	cur->next[f] = cube->starts[type_cube][f]->next[f]->next[6];
+	cur->next[f]->previous[f] = cur;
+	cur = cur->next[f];
+	cur->next[f] = cube->starts[type_cube][f];
+	cur->next[f]->previous[f] = cur;
+	cur = cur->next[f];
+
+	/** Face L **/
+	f = face_l;
+	cur = cube->starts[type_cube][face_u]->previous[face_u];
+	cube->starts[type_cube][f] = cur;
+	cur->next[f] = cube->starts[type_cube][face_f]->previous[face_f];
+	cur->next[f]->previous[f] = cur;
+	cur = cur->next[f];
+	cur->next[f] = cube->starts[type_cube][face_d]->previous[face_d];
+	cur->next[f]->previous[f] = cur;
+	cur = cur->next[f];
+	cur->next[f] = cube->starts[type_cube][face_b]->previous[face_b];
+	cur->next[f]->previous[f] = cur;
+	cur = cur->next[f];
+	cur->next[f] = cube->starts[type_cube][face_u]->previous[face_u];
+	cur->next[f]->previous[f] = cur;
+
+	/** Face R **/
+	f = face_r;
+	cur = cube->starts[type_cube][face_u]->next[face_u];
+	cube->starts[type_cube][f] = cur;
+	prev = cur;
+	cur->next[f] = cube->starts[type_cube][face_b]->next[face_b];
+	cur = cur->next[f];
+	cur->previous[f] = prev;
+	prev = cur;
+	cur->next[f] = cube->starts[type_cube][face_d]->next[face_d];
+	cur = cur->next[f];
+	cur->previous[f] = prev;
+	prev = cur;
+	cur->next[f] = cube->starts[type_cube][face_f]->next[face_f];
+	cur = cur->next[f];
+	cur->previous[f] = prev;
+	prev = cur;
+	cur->next[f] = cube->starts[type_cube][face_u]->next[face_u];
+	cur = cur->next[f];
+	cur->previous[f] = prev;
+
+	return (EXIT_SUCCESS);	
 }
 
 char	*ft_list_mini_cube_create(i)
@@ -76,4 +306,101 @@ t_list_mini_cube	*ft_init_list_mini_cube(int i)
 		--count;
 	}
 	return (list_cube);
+}
+
+int ft_adt_cube(t_cube_lists *cube, int f, int i, int j)
+{
+
+	int access, ind_f, ind[2][4], count;
+	t_list_mini_cube *begin, *cur;
+
+	if (i == 1 && j == 1)
+		return (cube->starts[1][f]->mini_cube[0]);
+	begin = cube->starts[3 - ((i + j) % 2)][f];
+	
+	if (!((i + j) % 2))
+	{
+		/** 3 elts **/
+		if (f == face_b || f == face_f)
+			access = 0;
+		else if (f == face_u || f == face_d)
+			access = 1;
+		else
+			access = 2;
+	}
+	else
+	{	
+		/** 2 elts **/
+		if (f == face_b || f == face_f || ((f == face_u || f == face_d) && i == 1))
+			access = 0;
+		else
+			access = 1;
+	}
+	ind[0][0] = 0;
+	ind[0][1] = 2;
+	ind[0][2] = 22;
+	ind[0][3] = 20;
+	ind[1][0] = 1;
+	ind[1][1] = 12;
+	ind[1][2] = 21;
+	ind[1][3] = 10;
+	ind_f = i * 10 + j;
+	count = 0;
+	cur = begin;
+	while (ind[(i + j) % 2][count] != ind_f)
+	{
+		++count;
+		cur = cur->next[f];
+	}
+	return (cur->mini_cube[access]);
+}
+
+int ft_adt_cube_ecrire(t_cube_lists *cube, int f, int i, int j, int c)
+{	
+
+	int access, ind_f, ind[2][4], count;
+	t_list_mini_cube *begin, *cur;
+
+	if (i == 1 && j == 1)
+	{	cube->starts[1][f]->mini_cube[0] = c;
+		return (cube->starts[1][f]->mini_cube[0]);
+	}
+	begin = cube->starts[3 - ((i + j) % 2)][f];
+	if (!((i + j) % 2))
+	{
+		/** 3 elts **/
+		if (f == face_b || f == face_f)
+			access = 0;
+		else if (f == face_u || f == face_d)
+			access = 1;
+		else
+			access = 2;
+	}
+	else
+	{	
+		/** 2 elts **/
+		if (f == face_b || f == face_f || ((f == face_u || f == face_d) && i == 1))
+			access = 0;
+		else
+			access = 1;
+	}
+	ind[0][0] = 0;
+	ind[0][1] = 2;
+	ind[0][2] = 22;
+	ind[0][3] = 20;
+	ind[1][0] = 1;
+	ind[1][1] = 12;
+	ind[1][2] = 21;
+	ind[1][3] = 10;
+	ind_f = i * 10 + j;
+	count = 0;
+	cur = begin;
+	while (ind[(i + j) % 2][count] != ind_f)
+	{
+		++count;
+		cur = cur->next[f];
+	}
+	cur->mini_cube[access] = c;
+	return (cur->mini_cube[access]);
+
 }

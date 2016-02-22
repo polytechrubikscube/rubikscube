@@ -60,6 +60,21 @@ t_list	*ft_determine_movs(t_cube_lists *cube)
 	return (movs);
 }
 
+int ft_cube_lists_rot_del_last(t_cube_lists *cube)
+{
+	int rot;
+
+	rot = ft_list_head(cube->rotations);
+	if (rot >= 0 && rot < 6)
+		rot = rot + 12;
+	else if (rot >= 12 && rot <= 18)
+		rot = rot - 12;
+	ft_cube_lists_rot(cube, rot);
+	cube->rotations = ft_list_del_head(cube->rotations);
+	cube->node_level = cube->node_level - 1;
+	return (1);
+}
+
 int	ft_backtrack(t_cube_lists *cube)
 {
 	t_list *movs;
@@ -67,7 +82,7 @@ int	ft_backtrack(t_cube_lists *cube)
 
 	if (ft_forbidden_set(cube))
 		return (-1);
-	if (ft_lists_cube_is_solved(cube))
+	if (ft_cube_is_solved(cube))
 		/** Le backtrack est terminée la solution est contenue dans le cube passé en param **/
 		return (1);
 	if (cube->node_level > 29)
@@ -76,12 +91,12 @@ int	ft_backtrack(t_cube_lists *cube)
 
 	while (movs && !stop)
 	{
-		ft_lists_rot(cube, ft_list_head(movs)); 
+		ft_cube_lists_rot(cube, ft_list_head(movs)); 
 		/** On fait la rot, on ajoute la rot a la liste, on incremente la profondeur du noeud **/
 		
-		if (!stop = ft_backtrack(cube));
+		if (!(stop = ft_backtrack(cube)));
 		{
-			ft_lists_rot_del_last(cube);
+			ft_cube_lists_rot_del_last(cube);
 			/** On annule le dernier ft_lists_rot **/
 			movs = ft_list_del_head(movs);
 			/** On supprime la tete de la liste movs **/
@@ -93,7 +108,19 @@ int	ft_backtrack(t_cube_lists *cube)
 
 int	ft_cube_is_solved(t_cube_lists *cube)
 {
-	while (cube->
+	int i, j, k, color;
+	/** while (cube-> **/
+	for (i = 0; i < 6; i++)
+	{
+		color = ft_adt_cube(cube, i, 1, 1);
+		for (j = 0; j < 4; ++j)
+			for(k = 0; k < 4; ++k)
+			{
+				if (color != ft_adt_cube(cube, i, j, k))
+					return (0);
+			}
+	}
+	return (1);
 }
 
 int	ft_forbidden_set(t_cube_lists *cube)
@@ -101,5 +128,5 @@ int	ft_forbidden_set(t_cube_lists *cube)
 	int forbidden;
 
 	forbidden = 0;
-	return (forbidden)
+	return (forbidden);
 }

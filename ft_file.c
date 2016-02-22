@@ -13,18 +13,7 @@
 
 #include "rubikscube.h"
 
-/** void	*ft_error(int e)
-{
-	printf ("Error\t");
-	switch (e)
-	{
-		case 1:
-			printf("File Reading Error");
-	}
-	return (NULL);
-} **/
-
-t_cube	*ft_read_file(char *path)
+t_cube_lists	*ft_read_file(char *path)
 {
 	int fd;
 	int cur_color;
@@ -34,7 +23,7 @@ t_cube	*ft_read_file(char *path)
 	int index;
 	ssize_t size;
 	char *buff;
-	t_cube *cube;
+	t_cube_lists *cube;
 
 	/** Ouverture du fichier et récupération du file descriptor **/
 	fd = open(path, O_RDONLY);
@@ -51,6 +40,7 @@ t_cube	*ft_read_file(char *path)
 
 	/** Lecture du fichier **/
 	size = read(fd, buff, BUFF_SIZE);
+
 	if (size <= 0)
 	{
 		printf("File Reading Error. Not found or corrupt.");
@@ -65,8 +55,8 @@ t_cube	*ft_read_file(char *path)
 		return (NULL);
 	}
 	
-	/** Traitement du buffer **/
-	cube = ft_new_cube();
+	/** Traitement du buffer **/	
+	cube = ft_init_cube_lists();
 	cur_face = 0;
 	line = 0;
 	col = 0;
@@ -74,8 +64,9 @@ t_cube	*ft_read_file(char *path)
 	for (index = 0; index <= size && cur_face < 6; index++)
 	{
 		cur_color = ft_char_to_color(buff[index]);
+
 		if (cur_color >= 0)
-			cube->faces[cur_face][line][col].color = cur_color;
+			ft_adt_cube_ecrire(cube, cur_face, line, col, cur_color);
 		else
 		{
 			printf("File Reading Error [bad color]");

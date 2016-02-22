@@ -56,7 +56,7 @@ char	ft_color_to_char(int c)
 	}
 }
 
-void	ft_print_cube(t_cube *cube)
+void	ft_print_cube(t_cube_lists *cube)
 {
 	int cur_face;
 	int cur_line;
@@ -72,7 +72,7 @@ void	ft_print_cube(t_cube *cube)
 		{
 			printf("||");
 			for (cur_col = 0; cur_col < 3; cur_col++)
-				printf(" %c |", ft_color_to_char(cube->faces[cur_face][cur_line][cur_col].color));
+				printf(" %c |", ft_color_to_char(ft_adt_cube(cube, cur_face, cur_line, cur_col)));
 			printf("|\n");
 		}
 		for (cur_col = 0; cur_col < 4; cur_col++)
